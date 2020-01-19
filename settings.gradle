@@ -1,0 +1,18 @@
+rootProject.name = 'programming'
+
+/*[
+        'interview':  ['paypay',
+                       'amazon'
+        ]
+].each( {folder, subprojects ->
+    subprojects.each({subproject ->
+        include(subproject)
+        project(':' + subproject).projectDir = file(folder + '/'+ subproject)
+    })}
+)*/
+include 'algorithm'
+include 'interview'
+include 'paypay'
+include 'interview:paypay'
+findProject(':interview:paypay')?.name = 'paypay'
+

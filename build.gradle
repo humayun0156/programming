@@ -1,0 +1,45 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+    }
+    dependencies {
+        classpath "gradle.plugin.com.palantir:jacoco-coverage:0.4.0"
+        classpath "gradle.plugin.com.github.spotbugs:spotbugs-gradle-plugin:1.6.3"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'com.palantir.jacoco-full-report'
+apply plugin: 'com.palantir.jacoco-coverage'
+apply plugin: 'pmd'
+apply plugin: "com.github.spotbugs"
+
+group 'org.open'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile "junit:junit:4.12"
+    testCompile "org.assertj:assertj-core:3.10.0"
+    testCompile "org.mockito:mockito-core:2.9.0"
+}
+
+jacocoCoverage {
+    // exceptions for plain beans in itemdataapi
+    classThreshold 0.8, INSTRUCTION, ~"com.paypay.gromming.impl.ImmutableQueue"
+    classThreshold 0.8, BRANCH, ~"com.paypay.gromming.impl.ImmutableQueue"
+}
+
+// ensure jacoco data is deleted before tests
+test.doFirst {
+    delete "${buildDir}/jacoco/test.exec"
+}
